@@ -13,10 +13,10 @@ const PROFESSIONS = [
 ];
 
 const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1642055514517-7b52288890ec?auto=format&fit=crop&w=2000&q=70",
-  "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=2000&q=70",
-  "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=2000&q=70",
-  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=2000&q=70",
+  "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=2000&q=75",
+  "https://images.unsplash.com/photo-1642055514517-7b52288890ec?auto=format&fit=crop&w=2000&q=75",
+  "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=2000&q=75",
+  "https://images.unsplash.com/photo-1622230208995-0f26eba75875?auto=format&fit=crop&w=2000&q=75",
 ];
 
 function greeting() {
@@ -46,10 +46,10 @@ function Hero() {
             }}
           />
         ))}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,0.35) 0%, rgba(15,23,42,0.65) 65%, rgba(15,23,42,0.92) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,0.05) 0%, rgba(15,23,42,0.15) 55%, rgba(15,23,42,0.55) 100%)" }} />
         <div className="container" style={{ position: "relative", padding: "100px 32px 130px", width: "100%" }}>
-          <div style={{ fontSize: 15, color: "#fff", opacity: 0.85, marginBottom: 10 }}>{greet}.</div>
-          <h1 style={{ fontSize: "clamp(32px, 5.5vw, 56px)", lineHeight: 1.05, marginBottom: 0, maxWidth: 720, color: "#fff", fontWeight: 800, letterSpacing: "-0.03em" }}>
+          <div style={{ display: "inline-block", fontSize: 15, color: "#fff", opacity: 0.95, marginBottom: 10, background: "rgba(15,23,42,0.35)", padding: "4px 12px", borderRadius: 20, backdropFilter: "blur(4px)" }}>{greet}.</div>
+          <h1 style={{ fontSize: "clamp(32px, 5.5vw, 56px)", lineHeight: 1.05, marginBottom: 0, maxWidth: 720, color: "#fff", fontWeight: 800, letterSpacing: "-0.03em", textShadow: "0 2px 24px rgba(15,23,42,0.45)" }}>
             Die nächste Stelle in Ihrer Apotheke, die sich richtig anfühlt.
           </h1>
         </div>
