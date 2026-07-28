@@ -20,32 +20,47 @@ const TEAM_IMAGES = [
   "https://images.openai.com/static-rsc-4/6d7JWK1FFzWVeVj-fdKU-qGJb54aLD-m8G_rMDht4uTW0LwcdnB0cStstGjegtiz5OIzlLv9sVtVAy-jay6Wzv_NAyPwc9P81uP6BzHX_fOZkaeBqK4BpcKQ1K07u9abU7d63nqHXTwvF53nskvLYmiITeBjr_4GEWam5rrpCNlflq4RGEqdRyuCnwOaskqr?purpose=fullsize",
 ];
 
-function MarqueeImage({ src }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return null;
-  return <img src={src} alt="Apotheke" loading="lazy" onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />;
-}
-
-function ImageMarquee() {
-  const images = [...TEAM_IMAGES, ...TEAM_IMAGES];
+function Hero() {
   return (
-    <div style={{ overflow: "hidden", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
-      <div className="marquee-track" style={{ display: "flex", width: "max-content" }}>
-        {images.map((src, i) => (
-          <div key={i} style={{ flex: "0 0 auto", width: 300, height: 190 }}>
-            <MarqueeImage src={src} />
-          </div>
+    <div style={{ position: "relative", marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw", overflow: "hidden" }}>
+      <div style={{ position: "relative", minHeight: 520, display: "flex", alignItems: "center" }}>
+        {TEAM_IMAGES.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt="Apotheke"
+            className="hero-bg-image"
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+            style={{
+              position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+              animationDelay: `${i * 5}s`,
+            }}
+          />
         ))}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,0.25) 0%, rgba(15,23,42,0.45) 55%, rgba(15,23,42,0.75) 100%)" }} />
+        <div className="container" style={{ position: "relative", padding: "110px 32px", width: "100%", textAlign: "center" }}>
+          <div style={{ fontSize: 15, color: "var(--amber)", fontWeight: 700, marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            Karriereplattform für Apotheken Schweiz
+          </div>
+          <h1 style={{ fontSize: "clamp(32px, 5.5vw, 58px)", lineHeight: 1.06, color: "#fff", fontWeight: 800, letterSpacing: "-0.03em", textShadow: "0 2px 20px rgba(0,0,0,0.4)", maxWidth: 760, margin: "0 auto" }}>
+            Gesundheit braucht die richtigen Menschen.
+          </h1>
+        </div>
       </div>
       <style>{`
-        .marquee-track { animation: officina-marquee 40s linear infinite; }
-        .marquee-track:hover { animation-play-state: paused; }
-        @keyframes officina-marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+        .hero-bg-image {
+          opacity: 0;
+          animation: officina-hero-fade 25s infinite;
+        }
+        @keyframes officina-hero-fade {
+          0% { opacity: 0; }
+          4% { opacity: 1; }
+          18% { opacity: 1; }
+          22% { opacity: 0; }
+          100% { opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .marquee-track { animation: none; }
+          .hero-bg-image { animation: none; opacity: 1; }
         }
       `}</style>
     </div>
@@ -120,8 +135,8 @@ function HomeInner() {
 
   return (
     <div>
+      <Hero />
       <SplitHero />
-      <ImageMarquee />
       <div className="container" style={{ padding: "40px 32px 80px" }} id="jobs">
         <h2 style={{ fontSize: 22, marginBottom: 4 }}>Neuste Stelleninserate</h2>
         <div style={{ width: 46, height: 3, background: "var(--amber)", marginBottom: 24 }} />
