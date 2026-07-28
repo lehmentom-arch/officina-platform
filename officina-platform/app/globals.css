@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --pine: #0F172A;
+  --pine: #232323;
+  --pine-2: #2B2B2B;
   --paper: #FFFFFF;
-  --panel: #F8FAFC;
-  --amber: #16A34A;
-  --amber-dark: #15803D;
-  --line: #E2E8F0;
-  --text2: #64748B;
+  --panel: #F7F8F6;
+  --panel-highlight: #EAF7EC;
+  --amber: #2E9E3F;
+  --amber-dark: #237D33;
+  --line: #E5E7E4;
+  --text2: #62675F;
   --danger: #DC2626;
 }
 
@@ -16,13 +18,13 @@
 body {
   margin: 0;
   background: var(--paper);
-  color: var(--pine);
+  color: #1F2421;
   font-family: 'Inter', sans-serif;
 }
 
 h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
 
-a { color: var(--pine); }
+a { color: #1F2421; }
 
 input, select, textarea {
   padding: 10px 12px;
@@ -49,22 +51,22 @@ button {
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 10px 20px;
+  padding: 12px 22px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 .btn-primary:hover { background: var(--amber-dark); }
 
 .btn-ghost {
   background: transparent;
-  color: var(--pine);
+  color: #1F2421;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 9px 18px;
   font-size: 14px;
   font-weight: 600;
 }
-.btn-ghost:hover { border-color: var(--pine); }
+.btn-ghost:hover { border-color: #1F2421; }
 
 .panel {
   background: var(--panel);
@@ -78,14 +80,14 @@ button {
   padding: 4px 10px;
   border-radius: 20px;
   border: 1px solid var(--line);
-  color: #334155;
+  color: #3F453F;
   display: inline-block;
 }
 
 .tag.accent {
   border-color: var(--amber);
   color: var(--amber-dark);
-  background: #F0FDF4;
+  background: var(--panel-highlight);
 }
 
 .container {
