@@ -4,23 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
 
-function NavButton({ href, children }) {
+function MenuLink({ href, children, onClick }) {
   const pathname = usePathname();
   const active = pathname === href;
   return (
     <Link
       href={href}
+      onClick={onClick}
       style={{
         textDecoration: "none",
-        fontSize: 13.5,
+        fontFamily: "'Fraunces', serif",
+        fontSize: "clamp(22px, 4vw, 32px)",
         fontWeight: 600,
-        padding: "8px 14px",
-        borderRadius: 20,
-        border: `1px solid ${active ? "var(--pine)" : "var(--line)"}`,
-        background: active ? "var(--pine)" : "transparent",
-        color: active ? "var(--paper)" : "var(--pine)",
-        whiteSpace: "nowrap",
-        transition: "background 0.15s, color 0.15s",
+        color: active ? "var(--amber)" : "#F0F2EA",
+        padding: "6px 0",
       }}
     >
       {children}
@@ -31,6 +28,8 @@ function NavButton({ href, children }) {
 export default function Nav() {
   const [session, setSession] = useState(null);
   const [role, setRole] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState("DE");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -46,39 +45,92 @@ export default function Nav() {
       .then(({ data }) => setRole(data?.role ?? null));
   }, [session]);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   const logout = async () => {
     await supabase.auth.signOut();
+    setOpen(false);
     window.location.href = "/";
   };
 
+  const close = () => setOpen(false);
+
   return (
-    <header style={{ borderBottom: "1px solid var(--line)", padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, position: "sticky", top: 0, background: "var(--paper)", zIndex: 10 }}>
-      <Link href="/" style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 20, textDecoration: "none", color: "var(--pine)" }}>
-        Officina<span style={{ color: "var(--amber)" }}>.ch</span>
-      </Link>
-      <nav style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <NavButton href="/">Stellen</NavButton>
-        <NavButton href="/pricing">Preise</NavButton>
-        <NavButton href="/favorites">Favoriten</NavButton>
-        <NavButton href="/alerts">Job-Alarm</NavButton>
-        {role === "candidate" && <NavButton href="/my-applications">Meine Bewerbungen</NavButton>}
-        {role === "employer" && <NavButton href="/employer/dashboard">Dashboard</NavButton>}
-        {role === "admin" && <NavButton href="/admin">Admin</NavButton>}
-        {!session && <NavButton href="/employer/dashboard">Für Arbeitgeber</NavButton>}
-      </nav>
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        {session ? (
-          <>
-            <Link href="/profile" className="btn-ghost" style={{ textDecoration: "none" }}>Mein Profil</Link>
-            <button onClick={logout} className="btn-ghost">Abmelden</button>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className="btn-ghost" style={{ textDecoration: "none" }}>Login</Link>
-            <Link href="/register" className="btn-primary" style={{ textDecoration: "none" }}>Registrieren</Link>
-          </>
-        )}
-      </div>
-    </header>
+    <>
+      <header style={{ padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "var(--pine)", zIndex: 20 }}>
+        <Link href="/" style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 20, textDecoration: "none", color: "#FFFFFF" }}>
+          Officina<span style={{ color: "var(--amber)" }}>.ch</span>
+        </Link>
+        <button
+          aria-label={open ? "Menü schliessen" : "Menü öffnen"}
+          onClick={() => setOpen((v) => !v)}
+          style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.35)", borderRadius: 6, width: 42, height: 42, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 5 }}
+        >
+          <span style={{ width: 20, height: 2, background: "#FFFFFF", display: "block", transform: open ? "rotate(45deg) translate(4px, 4px)" : "none", transition: "transform 0.2s" }} />
+          <span style={{ width: 20, height: 2, background: "#FFFFFF", display: "block", opacity: open ? 0 : 1, transition: "opacity 0.2s" }} />
+          <span style={{ width: 20, height: 2, background: "#FFFFFF", display: "block", transform: open ? "rotate(-45deg) translate(4px, -4px)" : "none", transition: "transform 0.2s" }} />
+        </button>
+      </header>
+
+      {open && (
+        <div style={{ position: "fixed", inset: 0, background: "var(--pine)", zIndex: 30, display: "flex", flexDirection: "column", overflowY: "auto" }}>
+          <div style={{ padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Link href="/" onClick={close} style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 20, textDecoration: "none", color: "#F0F2EA" }}>
+              Officina<span style={{ color: "var(--amber)" }}>.ch</span>
+            </Link>
+            <button
+              aria-label="Menü schliessen"
+              onClick={close}
+              style={{ background: "transparent", border: "1px solid #F0F2EA", borderRadius: 6, width: 42, height: 42, cursor: "pointer", color: "#F0F2EA", fontSize: 20 }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22, padding: "20px 32px" }}>
+            <MenuLink href="/" onClick={close}>Stellen</MenuLink>
+            <MenuLink href="/employer/jobs/new" onClick={close}>Stelle inserieren</MenuLink>
+            <MenuLink href="/profile" onClick={close}>Profil erstellen</MenuLink>
+            <MenuLink href="/pricing" onClick={close}>Preise</MenuLink>
+            <MenuLink href="/favorites" onClick={close}>Favoriten</MenuLink>
+            <MenuLink href="/alerts" onClick={close}>Job-Alarm</MenuLink>
+            {role === "candidate" && <MenuLink href="/my-applications" onClick={close}>Meine Bewerbungen</MenuLink>}
+            {role === "employer" && <MenuLink href="/employer/dashboard" onClick={close}>Dashboard</MenuLink>}
+            {role === "admin" && <MenuLink href="/admin" onClick={close}>Admin</MenuLink>}
+
+            <div style={{ display: "flex", gap: 10, marginTop: 10, fontFamily: "'IBM Plex Mono', monospace", fontSize: 14 }}>
+              {["DE", "FR", "IT", "EN"].map((l, i) => (
+                <span key={l} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {i > 0 && <span style={{ color: "#5C7267" }}>|</span>}
+                  <button
+                    onClick={() => setLang(l)}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: lang === l ? "var(--amber)" : "#D6DED4", fontWeight: lang === l ? 700 : 400, fontSize: 14, padding: 0 }}
+                  >
+                    {l}
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ padding: "24px 32px 40px", display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+            {session ? (
+              <>
+                <Link href="/profile" onClick={close} className="btn-primary" style={{ textDecoration: "none", background: "var(--amber)" }}>Mein Profil</Link>
+                <button onClick={logout} className="btn-ghost" style={{ borderColor: "#F0F2EA", color: "#F0F2EA" }}>Abmelden</button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={close} className="btn-ghost" style={{ textDecoration: "none", borderColor: "#F0F2EA", color: "#F0F2EA" }}>Login</Link>
+                <Link href="/register" onClick={close} className="btn-primary" style={{ textDecoration: "none", background: "var(--amber)" }}>Registrieren</Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
