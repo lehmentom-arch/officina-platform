@@ -19,30 +19,50 @@ const HERO_IMAGES = [
   "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=2000&q=70",
 ];
 
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 5) return "Guten Abend";
+  if (h < 11) return "Guten Morgen";
+  if (h < 18) return "Guten Tag";
+  return "Guten Abend";
+}
+
 function Hero() {
+  const [greet, setGreet] = useState("Guten Tag");
+  useEffect(() => { setGreet(greeting()); }, []);
+
   return (
-    <div style={{ position: "relative", marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw", minHeight: 460, display: "flex", alignItems: "flex-end", overflow: "hidden", marginBottom: 32 }}>
-      {HERO_IMAGES.map((src, i) => (
-        <img
-          key={src}
-          src={src}
-          alt="Apotheke"
-          className="hero-bg-image"
-          style={{
-            position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
-            animationDelay: `${i * 6}s`,
-          }}
-        />
-      ))}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20,26,20,0.55) 0%, rgba(20,26,20,0.78) 55%, rgba(20,26,20,0.94) 100%)" }} />
-      <div className="container" style={{ position: "relative", padding: "80px 32px 40px", width: "100%" }}>
-        <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, letterSpacing: "0.14em", color: "var(--amber)", marginBottom: 14, textTransform: "uppercase", fontWeight: 600 }}>
-          Karriereplattform · Apotheken Schweiz
+    <div style={{ position: "relative", marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw", overflow: "hidden", marginBottom: -56 }}>
+      <div style={{ position: "relative", minHeight: 520, display: "flex", alignItems: "flex-end" }}>
+        {HERO_IMAGES.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt="Apotheke"
+            className="hero-bg-image"
+            style={{
+              position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+              animationDelay: `${i * 6}s`,
+            }}
+          />
+        ))}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,0.35) 0%, rgba(15,23,42,0.65) 65%, rgba(15,23,42,0.92) 100%)" }} />
+        <div className="container" style={{ position: "relative", padding: "100px 32px 130px", width: "100%" }}>
+          <div style={{ fontSize: 15, color: "#fff", opacity: 0.85, marginBottom: 10 }}>{greet}.</div>
+          <h1 style={{ fontSize: "clamp(32px, 5.5vw, 56px)", lineHeight: 1.05, marginBottom: 0, maxWidth: 720, color: "#fff", fontWeight: 800, letterSpacing: "-0.03em" }}>
+            Die nächste Stelle in Ihrer Apotheke, die sich richtig anfühlt.
+          </h1>
         </div>
-        <h1 style={{ fontSize: "clamp(30px, 5vw, 48px)", lineHeight: 1.08, marginBottom: 0, maxWidth: 680, color: "#F5F7F1" }}>
-          Die nächste Stelle in Ihrer Apotheke — sauber sortiert.
-        </h1>
       </div>
+
+      <div className="container" style={{ position: "relative", padding: "0 32px" }}>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", transform: "translateY(-56px)" }}>
+          <QuickAction href="#jobs" icon="↓" title="Stellen durchsuchen" subtitle="Alle offenen Positionen ansehen" />
+          <QuickAction href="/employer/jobs/new" icon="+" title="Stelle inserieren" subtitle="Als Apotheke veröffentlichen" />
+          <QuickAction href="/cantons" icon="⌖" title="Nach Kanton suchen" subtitle="Mit allen 26 Flaggen" />
+        </div>
+      </div>
+
       <style>{`
         .hero-bg-image {
           opacity: 0;
@@ -60,6 +80,26 @@ function Hero() {
         }
       `}</style>
     </div>
+  );
+}
+
+function QuickAction({ href, icon, title, subtitle }) {
+  return (
+    <a href={href} style={{
+      flex: "1 1 220px", textDecoration: "none", color: "var(--pine)",
+      background: "#fff", border: "1px solid var(--line)", borderRadius: 14,
+      padding: "16px 18px", display: "flex", gap: 12, alignItems: "center",
+      boxShadow: "0 12px 30px rgba(15,23,42,0.10)",
+    }}>
+      <span style={{
+        width: 38, height: 38, borderRadius: "50%", background: "#F0FDF4", color: "var(--amber-dark)",
+        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, flexShrink: 0,
+      }}>{icon}</span>
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 700 }}>{title}</div>
+        <div style={{ fontSize: 12, color: "var(--text2)" }}>{subtitle}</div>
+      </div>
+    </a>
   );
 }
 
@@ -153,7 +193,8 @@ function HomeInner() {
   return (
     <div>
       <Hero />
-      <div className="container" style={{ padding: "0 32px 80px" }}>
+      <div className="container" style={{ padding: "40px 32px 80px" }}>
+        <div id="jobs" style={{ position: "relative", top: -20 }} />
         <WhySection />
         <h2 style={{ fontSize: 24, marginBottom: 18 }}>Offene Stellen</h2>
 
@@ -178,10 +219,10 @@ function HomeInner() {
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {filtered.map((job) => (
             <Link key={job.id} href={`/jobs/${job.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-              <article className="panel" style={{ display: "flex", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+              <article className="job-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap", background: "#fff", border: "1px solid var(--line)", borderRadius: 14, padding: "22px 24px", transition: "box-shadow 0.15s, transform 0.15s" }}>
                 <div>
                   <h3 style={{ fontSize: 20, marginBottom: 4 }}>{job.title}</h3>
-                  <div style={{ fontSize: 14, color: "#31463D", marginBottom: 8 }}>
+                  <div style={{ fontSize: 14, color: "#475569", marginBottom: 8 }}>
                     {job.companies?.name} · {job.place} ({job.canton})
                   </div>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -190,12 +231,16 @@ function HomeInner() {
                     {job.companies?.verified && <span className="tag accent">✓ verifiziert</span>}
                   </div>
                 </div>
+                <span style={{ fontSize: 20, color: "var(--amber)", flexShrink: 0 }}>→</span>
               </article>
             </Link>
           ))}
         </div>
       )}
       </div>
+      <style>{`
+        .job-card:hover { box-shadow: 0 12px 26px rgba(15,23,42,0.08); transform: translateY(-2px); }
+      `}</style>
     </div>
   );
 }
