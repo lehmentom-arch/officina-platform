@@ -32,7 +32,7 @@ function Hero() {
           }}
         />
       ))}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,36,30,0.55) 0%, rgba(15,36,30,0.75) 55%, rgba(15,36,30,0.92) 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20,26,20,0.55) 0%, rgba(20,26,20,0.78) 55%, rgba(20,26,20,0.94) 100%)" }} />
       <div className="container" style={{ position: "relative", padding: "80px 32px 40px", width: "100%" }}>
         <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, letterSpacing: "0.14em", color: "var(--amber)", marginBottom: 14, textTransform: "uppercase", fontWeight: 600 }}>
           Karriereplattform · Apotheken Schweiz
@@ -61,50 +61,49 @@ function Hero() {
   );
 }
 
-function FeatureList({ title, items }) {
+function IconPeople() {
   return (
-    <div className="panel" style={{ flex: "1 1 260px" }}>
-      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 18, marginBottom: 14, color: "var(--pine)" }}>{title}</div>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-        {items.map((item) => (
-          <li key={item} style={{ display: "flex", gap: 10, alignItems: "center", fontSize: 14.5, color: "#31463D" }}>
-            <span style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
-              width: 20, height: 20, borderRadius: "50%", background: "var(--pine)", color: "var(--paper)",
-              fontSize: 12, flexShrink: 0,
-            }}>✓</span>
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="var(--amber)" strokeWidth="1.6">
+      <circle cx="22" cy="18" r="6" />
+      <path d="M12 40c0-6 4.5-10 10-10s10 4 10 10" />
+      <circle cx="38" cy="20" r="5" />
+      <path d="M31 40c0.5-5 4-8.5 9-8.5" />
+    </svg>
+  );
+}
+function IconDoc() {
+  return (
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="var(--amber)" strokeWidth="1.6">
+      <path d="M16 8h16l8 8v32a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2Z" />
+      <path d="M32 8v8h8" />
+      <path d="M28 24v12M22 30h12" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconShield() {
+  return (
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="var(--amber)" strokeWidth="1.6">
+      <path d="M28 6 44 12v14c0 12-7 20-16 24-9-4-16-12-16-24V12Z" />
+      <path d="M20 27l6 6 10-11" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
-function FeaturesSection() {
+function WhySection() {
+  const items = [
+    { Icon: IconPeople, text: "Arbeitgeber, die Officina.ch nutzen, können dich bei Interesse direkt kontaktieren. Das erhöht deine Chance, schnell die passende Stelle zu finden." },
+    { Icon: IconDoc, text: "Für ein Profil solltest du Apotheker:in, Pharma-Assistent:in oder in einer verwandten Rolle im pharmazeutischen Umfeld tätig sein oder werden wollen." },
+    { Icon: IconShield, text: "Officina.ch ist eine Schweizer Plattform, die Datenschutz ernst nimmt. Alle Daten werden in der Schweiz gespeichert und niemals an Dritte weitergegeben." },
+  ];
   return (
-    <section style={{ marginBottom: 40 }}>
-      <h2 style={{ fontSize: 24, marginBottom: 18 }}>Funktionen</h2>
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
-        <FeatureList title="Bewerber" items={["Lebenslauf", "Job-Alarm", "Favoriten", "Chat", "Bewerben mit einem Klick"]} />
-        <FeatureList title="Arbeitgeber" items={["Inserate", "Bewerber verwalten", "Nachrichten", "Statistiken", "Firmenprofil"]} />
-      </div>
-      <div className="panel" style={{ borderStyle: "dashed" }}>
-        <div style={{ fontFamily: "'Fraunces', serif", fontSize: 18, marginBottom: 14, color: "var(--pine)" }}>
-          Version 2 <span style={{ fontSize: 12, fontWeight: 600, color: "var(--amber)", verticalAlign: "middle", marginLeft: 8 }}>GEPLANT</span>
-        </div>
-        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-          {["KI erstellt Stelleninserate", "KI bewertet Lebensläufe", "KI schlägt passende Kandidaten vor", "Video-Stellenanzeigen", "Gehaltsvergleich", "Arbeitgeberbewertungen"].map((item) => (
-            <li key={item} style={{ display: "flex", gap: 10, alignItems: "center", fontSize: 14.5, color: "var(--text2)" }}>
-              <span style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                width: 20, height: 20, borderRadius: "50%", border: "1px solid var(--line)",
-                fontSize: 11, flexShrink: 0,
-              }}>◦</span>
-              {item}
-            </li>
-          ))}
-        </ul>
+    <section style={{ marginBottom: 44 }}>
+      <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
+        {items.map(({ Icon, text }, i) => (
+          <div key={i} style={{ flex: "1 1 240px" }}>
+            <Icon />
+            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#31463D", marginTop: 14 }}>{text}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -145,8 +144,7 @@ export default function HomePage() {
     <div>
       <Hero />
       <div className="container" style={{ padding: "0 32px 80px" }}>
-        <FeaturesSection />
-
+        <WhySection />
         <h2 style={{ fontSize: 24, marginBottom: 18 }}>Offene Stellen</h2>
 
       <div className="panel" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 24 }}>
