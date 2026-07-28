@@ -1,7 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
+import { CANTONS } from "../lib/cantons";
 
 const PROFESSIONS = [
   { key: "all", label: "Alle Rollen" },
@@ -110,10 +112,19 @@ function WhySection() {
 }
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="container" style={{ padding: 48 }}>Lade…</div>}>
+      <HomeInner />
+    </Suspense>
+  );
+}
+
+function HomeInner() {
+  const searchParams = useSearchParams();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-  const [canton, setCanton] = useState("all");
+  const [canton, setCanton] = useState(searchParams.get("canton") || "all");
   const [profession, setProfession] = useState("all");
 
   useEffect(() => {
@@ -131,7 +142,6 @@ export default function HomePage() {
     setLoading(false);
   }
 
-  const cantons = ["all", ...Array.from(new Set(jobs.map((j) => j.canton).filter(Boolean)))];
   const filtered = jobs.filter((j) => {
     const q = query.trim().toLowerCase();
     const matchesQuery = !q || `${j.title} ${j.companies?.name} ${j.place}`.toLowerCase().includes(q);
@@ -150,7 +160,8 @@ export default function HomePage() {
       <div className="panel" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 24 }}>
         <input placeholder="Titel, Betrieb oder Ort suchen…" value={query} onChange={(e) => setQuery(e.target.value)} style={{ flex: 2, minWidth: 180 }} />
         <select value={canton} onChange={(e) => setCanton(e.target.value)} style={{ flex: 1 }}>
-          {cantons.map((c) => <option key={c} value={c}>{c === "all" ? "Alle Kantone" : c}</option>)}
+          <option value="all">Alle Kantone</option>
+          {CANTONS.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
         </select>
         <select value={profession} onChange={(e) => setProfession(e.target.value)} style={{ flex: 1 }}>
           {PROFESSIONS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
