@@ -13,12 +13,11 @@ function NavLink({ href, children, onClick }) {
       onClick={onClick}
       style={{
         textDecoration: "none",
-        fontSize: 14,
+        fontSize: 14.5,
         fontWeight: 600,
-        padding: "8px 12px",
-        borderRadius: 8,
-        color: active ? "#fff" : "var(--pine)",
-        background: active ? "var(--amber)" : "transparent",
+        padding: "8px 4px",
+        color: active ? "var(--amber)" : "#fff",
+        borderBottom: active ? "2px solid var(--amber)" : "2px solid transparent",
         whiteSpace: "nowrap",
       }}
     >
@@ -52,9 +51,8 @@ export default function Nav() {
   };
 
   const links = [
-    { href: "/", label: "Stellen" },
-    { href: "/employer/jobs/new", label: "Stelle inserieren" },
-    { href: "/cantons", label: "Kantone" },
+    { href: "/", label: "Jobs" },
+    { href: "/profile", label: "Profil erstellen" },
     { href: "/pricing", label: "Preise" },
     { href: "/favorites", label: "Favoriten" },
     { href: "/alerts", label: "Job-Alarm" },
@@ -64,27 +62,22 @@ export default function Nav() {
   if (role === "admin") links.push({ href: "/admin", label: "Admin" });
 
   return (
-    <header style={{ borderBottom: "1px solid var(--line)", position: "sticky", top: 0, background: "#fff", zIndex: 20 }}>
-      <div className="container" style={{ padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
-        <Link href="/" style={{ fontWeight: 800, fontSize: 19, textDecoration: "none", color: "var(--pine)", flexShrink: 0 }}>
-          Officina<span style={{ color: "var(--amber)" }}>.ch</span>
+    <header style={{ background: "var(--pine)", position: "sticky", top: 0, zIndex: 20 }}>
+      <div className="container" style={{ padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
+        <Link href="/" style={{ fontWeight: 800, fontSize: 19, textDecoration: "none", color: "#fff", flexShrink: 0, letterSpacing: "-0.01em" }}>
+          OFFICINA<span style={{ color: "var(--amber)" }}>.CH</span>
         </Link>
 
-        <nav className="nav-desktop" style={{ display: "flex", gap: 4, flexWrap: "wrap", flex: 1 }}>
+        <nav className="nav-desktop" style={{ display: "flex", gap: 22, flexWrap: "wrap", flex: 1, marginLeft: 24 }}>
           {links.map((l) => <NavLink key={l.href} href={l.href}>{l.label}</NavLink>)}
         </nav>
 
-        <div className="nav-desktop" style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
+        <div className="nav-desktop" style={{ display: "flex", gap: 12, alignItems: "center", flexShrink: 0 }}>
+          <span style={{ color: "#fff", fontSize: 13.5, opacity: 0.85 }}>DE</span>
           {session ? (
-            <>
-              <Link href="/profile" className="btn-ghost" style={{ textDecoration: "none" }}>Mein Profil</Link>
-              <button onClick={logout} className="btn-ghost">Abmelden</button>
-            </>
+            <button onClick={logout} className="btn-primary">Abmelden</button>
           ) : (
-            <>
-              <Link href="/login" className="btn-ghost" style={{ textDecoration: "none" }}>Login</Link>
-              <Link href="/register" className="btn-primary" style={{ textDecoration: "none" }}>Registrieren</Link>
-            </>
+            <Link href="/login" className="btn-primary" style={{ textDecoration: "none" }}>Login</Link>
           )}
         </div>
 
@@ -92,24 +85,21 @@ export default function Nav() {
           className="nav-mobile-toggle"
           aria-label="Menü öffnen"
           onClick={() => setMobileOpen((v) => !v)}
-          style={{ display: "none", background: "transparent", border: "1px solid var(--line)", borderRadius: 8, width: 40, height: 40, cursor: "pointer" }}
+          style={{ display: "none", background: "transparent", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, width: 40, height: 40, cursor: "pointer", color: "#fff" }}
         >
           <span style={{ fontSize: 18, lineHeight: 1 }}>☰</span>
         </button>
       </div>
 
       {mobileOpen && (
-        <div className="nav-mobile-panel" style={{ display: "none", flexDirection: "column", gap: 4, padding: "0 20px 20px", borderTop: "1px solid var(--line)" }}>
+        <div className="nav-mobile-panel" style={{ display: "none", flexDirection: "column", gap: 4, padding: "0 20px 20px" }}>
           {links.map((l) => <NavLink key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>{l.label}</NavLink>)}
           <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
             {session ? (
-              <>
-                <Link href="/profile" onClick={() => setMobileOpen(false)} className="btn-ghost" style={{ textDecoration: "none" }}>Mein Profil</Link>
-                <button onClick={logout} className="btn-ghost">Abmelden</button>
-              </>
+              <button onClick={logout} className="btn-primary">Abmelden</button>
             ) : (
               <>
-                <Link href="/login" onClick={() => setMobileOpen(false)} className="btn-ghost" style={{ textDecoration: "none" }}>Login</Link>
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="btn-ghost" style={{ textDecoration: "none", borderColor: "rgba(255,255,255,0.4)", color: "#fff" }}>Login</Link>
                 <Link href="/register" onClick={() => setMobileOpen(false)} className="btn-primary" style={{ textDecoration: "none" }}>Registrieren</Link>
               </>
             )}
