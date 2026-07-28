@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-  --pine: #16332B;
-  --paper: #F0F2EA;
-  --panel: #FBFAF5;
-  --amber: #C1622B;
-  --line: #A9BFA6;
-  --text2: #4B5A52;
+  --pine: #1E1F1D;
+  --paper: #FFFFFF;
+  --panel: #F7F8F6;
+  --amber: #1FA24B;
+  --line: #E1E4DF;
+  --text2: #5A5F5A;
   --danger: #C23B33;
 }
 
