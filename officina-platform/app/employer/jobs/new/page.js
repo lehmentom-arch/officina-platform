@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../../lib/supabaseClient";
-
-const CANTONS = ["ZH","BE","LU","UR","SZ","OW","NW","GL","ZG","FR","SO","BS","BL","SH","AR","AI","SG","GR","AG","TG","TI","VD","VS","NE","GE","JU"];
+import { CANTONS } from "../../../../lib/cantons";
 
 export default function NewJobPage() {
   const router = useRouter();
+  const [checking, setChecking] = useState(true);
+  const [needsLogin, setNeedsLogin] = useState(false);
+  const [needsCompany, setNeedsCompany] = useState(false);
   const [companyId, setCompanyId] = useState(null);
   const [form, setForm] = useState({
     title: "", profession: "apotheker", canton: "ZH", place: "",
@@ -17,12 +20,13 @@ export default function NewJobPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
-      if (!data.session) { router.push("/login"); return; }
+      if (!data.session) { setNeedsLogin(true); setChecking(false); return; }
       const { data: comp } = await supabase.from("companies").select("id").eq("owner_id", data.session.user.id).maybeSingle();
-      if (!comp) { router.push("/employer/company"); return; }
+      if (!comp) { setNeedsCompany(true); setChecking(false); return; }
       setCompanyId(comp.id);
+      setChecking(false);
     });
-  }, [router]);
+  }, []);
 
   const field = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -34,6 +38,37 @@ export default function NewJobPage() {
     setSaving(false);
     if (error) { setStatus(error.message); return; }
     router.push("/employer/dashboard");
+  }
+
+  if (checking) return <div className="container" style={{ padding: 48 }}>Lade…</div>;
+
+  if (needsLogin) {
+    return (
+      <div className="container" style={{ padding: "40px 32px 80px" }}>
+        <h1 style={{ fontSize: 22, marginBottom: 14 }}>Stelle inserieren</h1>
+        <div className="panel" style={{ maxWidth: 460 }}>
+          <p style={{ fontSize: 14, marginBottom: 16 }}>
+            Um eine Stelle zu veröffentlichen, brauchst du ein Arbeitgeber-Konto. Melde dich an oder registriere dich in unter einer Minute.
+          </p>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Link href="/login" className="btn-ghost" style={{ textDecoration: "none" }}>Login</Link>
+            <Link href="/register" className="btn-primary" style={{ textDecoration: "none" }}>Konto erstellen</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (needsCompany) {
+    return (
+      <div className="container" style={{ padding: "40px 32px 80px" }}>
+        <h1 style={{ fontSize: 22, marginBottom: 14 }}>Stelle inserieren</h1>
+        <div className="panel" style={{ maxWidth: 460 }}>
+          <p style={{ fontSize: 14, marginBottom: 16 }}>Bevor du eine Stelle veröffentlichst, richte kurz dein Firmenprofil ein.</p>
+          <Link href="/employer/company" className="btn-primary" style={{ textDecoration: "none" }}>Firmenprofil erstellen</Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -54,10 +89,10 @@ export default function NewJobPage() {
                 <option value="praktikum">Praktikum</option>
               </select>
             </div>
-            <div className="field" style={{ width: 100 }}>
+            <div className="field" style={{ width: 160 }}>
               Kanton
               <select value={form.canton} onChange={(e) => field("canton", e.target.value)}>
-                {CANTONS.map((c) => <option key={c}>{c}</option>)}
+                {CANTONS.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
               </select>
             </div>
           </div>
