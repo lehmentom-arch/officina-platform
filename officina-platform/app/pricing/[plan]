@@ -1,0 +1,159 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { supabase } from "../../../lib/supabaseClient";
+
+const TIER_DETAILS = {
+  standard: {
+    name: "Standard", price: 290, period: "einmalig / Inserat",
+    tagline: "Für den gelegentlichen Bedarf — eine Stelle schnell und unkompliziert besetzen.",
+    features: [
+      "1 aktives Stelleninserat",
+      "30 Tage Laufzeit, danach automatisch offline",
+      "Basis-Firmenprofil mit Name, Ort und Beschreibung",
+      "Bewerbungen direkt im Dashboard",
+    ],
+  },
+  premium: {
+    name: "Premium", price: 690, period: "pro Monat",
+    tagline: "Für Apotheken, die laufend Personal suchen und sich abheben möchten.",
+    features: [
+      "Bis zu 5 gleichzeitig aktive Inserate",
+      "Hervorgehobenes Listing in der Stellensuche",
+      "Bewerbungsverwaltung mit Status-Tracking",
+      "Direkter Chat mit Bewerbenden",
+      "Firmenlogo im Profil",
+    ],
+  },
+  pro: {
+    name: "Pro", price: 1490, period: "pro Monat",
+    tagline: "Für grössere Betriebe und Ketten mit kontinuierlichem Personalbedarf.",
+    features: [
+      "Unbegrenzte aktive Inserate",
+      "Premium-Firmenprofil mit Bildern",
+      "Zugriff auf den Springer-Pool für kurzfristige Vertretungen",
+      "Statistiken zu Aufrufen und Bewerbungen",
+      "Priorisierter Support",
+    ],
+  },
+};
+
+export default function PlanDetailPage() {
+  const { plan } = useParams();
+  const router = useRouter();
+  const tier = TIER_DETAILS[plan];
+  const [step, setStep] = useState("details");
+  const [session, setSession] = useState(null);
+  const [payment, setPayment] = useState("card");
+  const [processing, setProcessing] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+  }, []);
+
+  if (!tier) {
+    return <div className="container" style={{ padding: 48 }}>Diesen Plan gibt es nicht. <Link href="/pricing">Zurück zu den Preisen</Link></div>;
+  }
+
+  async function checkout() {
+    setError(null);
+    if (!session) { router.push("/register"); return; }
+    setProcessing(true);
+    const { data: company } = await supabase.from("companies").select("id").eq("owner_id", session.user.id).maybeSingle();
+    if (!company) { router.push("/employer/company"); return; }
+
+    const { error } = await supabase.from("invoices").insert({
+      company_id: company.id,
+      plan,
+      amount_chf: tier.price,
+      status: payment === "invoice" ? "open" : "paid",
+    });
+    setProcessing(false);
+    if (error) { setError(error.message); return; }
+    setDone(true);
+  }
+
+  if (done) {
+    return (
+      <div className="container" style={{ padding: "40px 32px 80px" }}>
+        <div className="panel" style={{ maxWidth: 480, textAlign: "center" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 10 }}>
+            {payment === "invoice" ? "Bestellung erfasst" : "Zahlung bestätigt"}
+          </div>
+          <p style={{ fontSize: 14, color: "var(--text2)", marginBottom: 20 }}>
+            {payment === "invoice"
+              ? `Du erhältst die Rechnung über CHF ${tier.price} per E-Mail. Der Plan „${tier.name}" ist bereits aktiv.`
+              : `Danke! Der Plan „${tier.name}" ist ab sofort aktiv.`}
+          </p>
+          <Link href="/employer/dashboard" className="btn-primary" style={{ textDecoration: "none" }}>Zum Dashboard</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container" style={{ padding: "40px 32px 80px" }}>
+      <Link href="/pricing" style={{ fontSize: 13, color: "var(--text2)", textDecoration: "none" }}>← Alle Preise</Link>
+      <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginTop: 16 }}>
+        <div className="panel" style={{ flex: "1 1 320px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>{tier.name}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 4 }}>
+            CHF {tier.price}<span style={{ fontSize: 13, fontWeight: 400, color: "var(--text2)" }}> {tier.period}</span>
+          </div>
+          <p style={{ fontSize: 14, color: "var(--text2)", marginBottom: 18 }}>{tier.tagline}</p>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
+            {tier.features.map((f) => (
+              <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                <span style={{ color: "var(--amber)", fontWeight: 700 }}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="panel" style={{ flex: "1 1 280px", alignSelf: "flex-start" }}>
+          {step === "details" ? (
+            <>
+              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Zahlungsart wählen</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+                <label style={{ display: "flex", gap: 10, alignItems: "center", border: "1px solid var(--line)", borderRadius: 8, padding: 12, cursor: "pointer" }}>
+                  <input type="radio" name="pay" checked={payment === "card"} onChange={() => setPayment("card")} style={{ width: "auto" }} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600 }}>Kreditkarte</div>
+                    <div style={{ fontSize: 12, color: "var(--text2)" }}>Sofort aktiv</div>
+                  </div>
+                </label>
+                <label style={{ display: "flex", gap: 10, alignItems: "center", border: "1px solid var(--line)", borderRadius: 8, padding: 12, cursor: "pointer" }}>
+                  <input type="radio" name="pay" checked={payment === "invoice"} onChange={() => setPayment("invoice")} style={{ width: "auto" }} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600 }}>Auf Rechnung</div>
+                    <div style={{ fontSize: 12, color: "var(--text2)" }}>Zahlungsziel 30 Tage</div>
+                  </div>
+                </label>
+              </div>
+
+              {payment === "card" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+                  <div className="field">Kartennummer<input placeholder="4242 4242 4242 4242" /></div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <div className="field" style={{ flex: 1 }}>Ablauf<input placeholder="MM/JJ" /></div>
+                    <div className="field" style={{ flex: 1 }}>CVC<input placeholder="123" /></div>
+                  </div>
+                  <div style={{ fontSize: 11.5, color: "var(--text2)" }}>Demo-Formular — echte Kartenzahlung folgt mit der Stripe-Integration.</div>
+                </div>
+              )}
+
+              {error && <div style={{ fontSize: 13, color: "var(--danger)", marginBottom: 12 }}>{error}</div>}
+              <button className="btn-primary" style={{ width: "100%" }} onClick={checkout} disabled={processing}>
+                {processing ? "…" : payment === "invoice" ? "Bestellen, Rechnung folgt" : `CHF ${tier.price} bezahlen`}
+              </button>
+              {!session && <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 10 }}>Du wirst zuerst gebeten, ein Arbeitgeber-Konto zu erstellen.</div>}
+            </>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
