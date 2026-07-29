@@ -34,7 +34,7 @@ export default function NewJobPage() {
     e.preventDefault();
     setSaving(true);
     setStatus(null);
-    const { error } = await supabase.from("jobs").insert({ ...form, company_id: companyId, status: "pending" });
+    const { error } = await supabase.from("jobs").insert({ ...form, company_id: companyId, status: "published" });
     setSaving(false);
     if (error) { setStatus(error.message); return; }
     router.push("/employer/dashboard");
@@ -76,7 +76,7 @@ export default function NewJobPage() {
       <div className="panel" style={{ maxWidth: 560 }}>
         <h1 style={{ fontSize: 22, marginBottom: 6 }}>Stelle erstellen</h1>
         <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 18 }}>
-          Neue Inserate werden vor der Veröffentlichung kurz durch das Admin-Team geprüft.
+          Deine Stelle ist sofort nach dem Absenden auf der Startseite sichtbar.
         </p>
         <form onSubmit={submit}>
           <div className="field">Stellentitel<input required value={form.title} onChange={(e) => field("title", e.target.value)} placeholder="z. B. Pharma-Assistent:in 80%" /></div>
@@ -114,7 +114,7 @@ export default function NewJobPage() {
           )}
           <div className="field">Beschreibung<textarea rows={5} value={form.description} onChange={(e) => field("description", e.target.value)} /></div>
           {status && <div style={{ fontSize: 13, color: "var(--danger)", marginBottom: 12 }}>{status}</div>}
-          <button className="btn-primary" type="submit" disabled={saving}>{saving ? "Wird erstellt…" : "Zur Prüfung einreichen"}</button>
+          <button className="btn-primary" type="submit" disabled={saving}>{saving ? "Wird veröffentlicht…" : "Stelle veröffentlichen"}</button>
         </form>
       </div>
     </div>
