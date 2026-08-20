@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apotheke Lindenhof — Ihre Gesundheit, sorgfältig begleitet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7F1;
+    --bg-alt:#FFFFFF;
+    --ink:#0F1512;
+    --ink-soft:#525E56;
+    --deep:#12291D;
+    --deep-2:#1B3B29;
+    --mint:#39D98A;
+    --mint-soft:#CFF3E0;
+    --line: rgba(15,21,18,0.10);
+    --r-lg: 28px;
+    --r-md: 18px;
+    --r-sm: 12px;
+    --max: 1220px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.02em; color:var(--ink);}
+  :focus-visible{ outline:2px solid var(--deep); outline-offset:3px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-soft); display:inline-flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--mint); }
+
+  /* ---------- NAV ---------- */
+  header{ position:sticky; top:0; z-index:50; padding:18px 0; }
+  nav{
+    max-width:var(--max); margin:0 auto; padding:10px 12px 10px 20px;
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(255,255,255,0.75); backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:999px;
+    box-shadow:0 10px 30px -18px rgba(15,21,18,0.25);
+  }
+  .logo{ display:flex; align-items:center; gap:10px; font-family:'Space Grotesk', sans-serif; font-size:18px; font-weight:700; }
+  .logo .mark{
+    width:34px; height:34px; border-radius:10px; background:var(--deep);
+    display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0;
+  }
+  .logo .mark::before, .logo .mark::after{ content:""; position:absolute; background:var(--mint); border-radius:2px; }
+  .logo .mark::before{ width:16px; height:3.5px; }
+  .logo .mark::after{ width:3.5px; height:16px; }
+  .nav-links{ display:flex; gap:30px; list-style:none; font-size:14.5px; font-weight:500; }
+  .nav-links a{ text-decoration:none; opacity:0.75; transition:opacity .2s; }
+  .nav-links a:hover{ opacity:1; }
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:14px; border:none; cursor:pointer;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    padding:12px 22px; border-radius:999px; transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-primary{ background:var(--deep); color:#fff; }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -10px rgba(18,41,29,0.5); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:64px 0 40px; position:relative; overflow:hidden; }
+  .hero::before{
+    content:""; position:absolute; top:-220px; right:-160px; width:640px; height:640px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, var(--mint-soft), transparent 70%);
+    filter:blur(10px); z-index:0;
+  }
+  .hero .wrap{ position:relative; z-index:1; display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center; }
+  .badge-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+  .pill{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.04em;
+    background:#fff; border:1px solid var(--line); padding:7px 14px; border-radius:999px; color:var(--ink-soft);
+  }
+  .hero h1{ font-size:clamp(42px, 5.6vw, 68px); line-height:1.0; margin-bottom:22px; }
+  .hero h1 span{ color:var(--mint); -webkit-text-stroke:0; }
+  .hero p.lead{ font-size:18px; color:var(--ink-soft); max-width:44ch; margin-bottom:32px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+
+  .hero-visual{
+    position:relative; background:var(--deep); border-radius:var(--r-lg);
+    padding:28px; color:#fff; overflow:hidden;
+    box-shadow:0 40px 70px -30px rgba(18,41,29,0.55);
+  }
+  .hero-visual::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 80% 0%, rgba(57,217,138,0.35), transparent 60%);
+  }
+  .hero-visual .top{ display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+  .hero-visual .top .status{ display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:12px; }
+  .hero-visual .top .dot{ width:8px; height:8px; border-radius:50%; background:var(--mint); animation:pulse 2s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+  .hero-visual .big-stat{ font-family:'Space Grotesk', sans-serif; font-size:56px; font-weight:700; margin-top:28px; position:relative; z-index:1; }
+  .hero-visual .big-stat-label{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:rgba(255,255,255,0.6); margin-top:6px; position:relative; z-index:1; }
+  .hero-visual .row{
+    margin-top:26px; display:flex; justify-content:space-between; padding-top:18px;
+    border-top:1px solid rgba(255,255,255,0.14); position:relative; z-index:1;
+  }
+  .hero-visual .row .k{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:rgba(255,255,255,0.55); }
+  .hero-visual .row .v{ font-family:'Space Grotesk', sans-serif; font-size:16px; margin-top:4px; }
+
+  /* ---------- TRUST STRIP ---------- */
+  .trust{ padding:20px 0 60px; }
+  .trust .wrap{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .trust-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-md); padding:22px;
+  }
+  .trust-card .v{ font-family:'Space Grotesk', sans-serif; font-size:30px; font-weight:700; }
+  .trust-card .k{ font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin-top:4px; }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:70px 0; }
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(30px,3.6vw,42px); margin-top:14px; }
+  .section-head p{ color:var(--ink-soft); margin-top:14px; font-size:16.5px; }
+
+  /* Bento services */
+  .bento{
+    display:grid; grid-template-columns:repeat(4, 1fr); grid-auto-rows:170px; gap:18px;
+  }
+  .bento .card{
+    border-radius:var(--r-md); padding:24px; position:relative; overflow:hidden;
+    opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease, box-shadow .25s ease;
+  }
+  .bento .card.in{ opacity:1; transform:translateY(0); }
+  .bento .card:hover{ box-shadow:0 24px 44px -22px rgba(15,21,18,0.35); }
+  .bento .c1{ grid-column:span 2; grid-row:span 2; background:var(--deep); color:#fff; }
+  .bento .c1 h3{ color:#fff; font-size:26px; }
+  .bento .c1 p{ color:rgba(255,255,255,0.72); }
+  .bento .card:not(.c1){ background:#fff; border:1px solid var(--line); }
+  .bento .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--mint); position:relative; z-index:1;
+  }
+  .bento .c1 .tag{ color:var(--mint); }
+  .bento h3{ font-size:18px; margin:12px 0 6px; position:relative; z-index:1; }
+  .bento p{ font-size:14px; color:var(--ink-soft); position:relative; z-index:1; }
+  .bento .c1::before{
+    content:""; position:absolute; right:-60px; bottom:-60px; width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(57,217,138,0.35), transparent 70%);
+  }
+
+  /* ---------- TEAM ---------- */
+  .team-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .team-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-md); padding:18px; text-align:left;
+    opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;
+  }
+  .team-card.in{ opacity:1; transform:translateY(0); }
+  .avatar{
+    width:100%; aspect-ratio:1/1; border-radius:var(--r-sm); background:var(--deep);
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px; position:relative; overflow:hidden;
+    font-family:'Space Grotesk', sans-serif; font-size:28px; color:#fff; font-weight:700;
+  }
+  .avatar::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 75% 15%, rgba(57,217,138,0.5), transparent 60%); }
+  .team-card h3{ font-size:16.5px; margin-bottom:2px; }
+  .team-card .role{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; }
+
+  /* ---------- HOURS ---------- */
+  .hours-wrap{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:start; }
+  .hours-card{ background:#fff; border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden; }
+  .hours-row{
+    display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center;
+    padding:16px 22px; border-bottom:1px solid var(--line); font-size:15px;
+  }
+  .hours-row:last-child{ border-bottom:none; }
+  .hours-row .day{ font-weight:600; font-family:'Space Grotesk', sans-serif; }
+  .hours-row .time{ font-family:'IBM Plex Mono', monospace; font-size:13.5px; color:var(--ink-soft); }
+  .hours-row.today{ background:var(--mint-soft); }
+  .hours-row .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--deep); color:#fff; padding:3px 9px; border-radius:999px;
+  }
+  .hours-row.closed .time{ color:#C0503F; }
+  .emergency-box{
+    margin-top:20px; background:#fff; border:1px solid var(--line); border-radius:var(--r-md);
+    padding:18px 22px; font-size:13.5px; color:var(--ink-soft); display:flex; gap:12px; align-items:flex-start;
+  }
+  .emergency-box b{ color:var(--ink); }
+
+  /* ---------- CONTACT ---------- */
+  .contact-section{ background:var(--deep); color:#fff; border-radius:var(--r-lg); margin:0 32px; max-width:calc(var(--max) - 64px + 64px); }
+  .contact-inner{ max-width:var(--max); margin:0 auto; padding:70px 40px; }
+  .contact-section .section-head h2, .contact-section .eyebrow{ color:#fff; }
+  .contact-section .eyebrow::before{ background:var(--mint); }
+  .contact-section .section-head p{ color:rgba(255,255,255,0.68); }
+  .contact-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+  .contact-info .item{ margin-bottom:24px; }
+  .contact-info .item .k{ font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+  .contact-info .item .v{ font-size:18px; margin-top:6px; font-family:'Space Grotesk', sans-serif; }
+  form{ display:flex; flex-direction:column; gap:14px; }
+  .field-group label{ display:block; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:6px; }
+  .field-group input, .field-group textarea{
+    width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.22);
+    color:#fff; padding:12px 14px; font-family:'Inter',sans-serif; font-size:15px; border-radius:var(--r-sm);
+  }
+  .field-group input::placeholder, .field-group textarea::placeholder{ color:rgba(255,255,255,0.38); }
+  .field-group textarea{ resize:vertical; min-height:96px; }
+  .contact-section .btn-primary{ background:var(--mint); color:var(--deep); align-self:flex-start; }
+  .contact-section .btn-primary:hover{ box-shadow:0 14px 28px -10px rgba(57,217,138,0.5); }
+
+  footer{ padding:44px 0; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  footer .fine{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); }
+
+  @media (max-width: 980px){
+    .nav-links{ display:none; }
+    .hero .wrap{ grid-template-columns:1fr; }
+    .trust .wrap{ grid-template-columns:repeat(2,1fr); }
+    .bento{ grid-template-columns:repeat(2,1fr); }
+    .bento .c1{ grid-column:span 2; grid-row:span 1; }
+    .team-grid{ grid-template-columns:repeat(2,1fr); }
+    .hours-wrap{ grid-template-columns:1fr; gap:32px; }
+    .contact-wrap{ grid-template-columns:1fr; gap:36px; }
+    .contact-section{ margin:0 16px; }
+  }
+  @media (max-width: 560px){
+    .wrap{ padding:0 18px; }
+    .bento{ grid-template-columns:1fr; }
+    .bento .c1{ grid-column:span 1; }
+    .team-grid{ grid-template-columns:1fr; }
+    .trust .wrap{ grid-template-columns:1fr 1fr; }
+    section{ padding:52px 0; }
+    .contact-inner{ padding:48px 22px; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="mark" aria-hidden="true"></span> Apotheke Lindenhof</div>
+    <ul class="nav-links">
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#zeiten">Öffnungszeiten</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="#kontakt" class="btn btn-primary">Beratung anfragen</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="badge-row">
+          <span class="pill">● seit 1994</span>
+          <span class="pill">30 Jahre Erfahrung</span>
+        </div>
+        <h1>Gesundheit,<br>klar <span>beraten.</span></h1>
+        <p class="lead">Persönliche Beratung, geprüfte Qualität und ein Team, das sich Zeit nimmt — für Rezepte, Gesundheitsfragen und alles, was dazwischen liegt.</p>
+        <div class="hero-actions">
+          <a href="#kontakt" class="btn btn-primary">Termin für Beratung</a>
+          <a href="#leistungen" class="btn btn-ghost">Leistungen ansehen</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="statusCard">
+        <div class="top">
+          <span class="status"><span class="dot"></span><span id="statusText">Jetzt geöffnet</span></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; opacity:.6;">LIVE</span>
+        </div>
+        <div class="big-stat" id="todayHours">08–18:30</div>
+        <div class="big-stat-label">Öffnungszeiten heute</div>
+        <div class="row">
+          <div><div class="k">Notfalldienst</div><div class="v">0800 143 143</div></div>
+          <div><div class="k">Nächster Termin</div><div class="v">15:30 Uhr</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trust">
+    <div class="wrap">
+      <div class="trust-card"><div class="v">30 Jahre</div><div class="k">Erfahrung</div></div>
+      <div class="trust-card"><div class="v">9</div><div class="k">Fachpersonen im Team</div></div>
+      <div class="trust-card"><div class="v">6'200+</div><div class="k">Beratungen / Jahr</div></div>
+      <div class="trust-card"><div class="v">365</div><div class="k">Tage Notfalldienst</div></div>
+    </div>
+  </div>
+
+  <section id="leistungen">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Leistungen</span>
+        <h2>Was wir für Sie übernehmen.</h2>
+        <p>Von der schnellen Rezeptabgabe bis zur ausführlichen Gesundheitsberatung.</p>
+      </div>
+      <div class="bento" id="servicesGrid">
+        <div class="card c1">
+          <span class="tag">Meistgenutzt</span>
+          <h3>Rezeptbestellung</h3>
+          <p>Online oder telefonisch bestellen, abholbereit innert Stunden — ohne Warteschlange.</p>
+        </div>
+        <div class="card"><span class="tag">Nach Termin</span><h3>Gesundheitscheck</h3><p>Blutdruck, Zucker, Cholesterin vor Ort.</p></div>
+        <div class="card"><span class="tag">Saisonal</span><h3>Impfberatung</h3><p>Grippe-, Reise- und Auffrischimpfungen.</p></div>
+        <div class="card"><span class="tag">Individuell</span><h3>Reiseberatung</h3><p>Impfschutz und Reiseapotheke fürs Ziel.</p></div>
+        <div class="card"><span class="tag">Vor Ort</span><h3>Kompression</h3><p>Vermessung und Anpassung von Strümpfen.</p></div>
+        <div class="card"><span class="tag">Auf Wunsch</span><h3>Naturheilkunde</h3><p>Homöopathie und Phytotherapie.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Team</span>
+        <h2>Die Menschen hinter dem Handverkauf.</h2>
+        <p>Ein eingespieltes Team aus Apotheker:innen und Pharma-Assistent:innen.</p>
+      </div>
+      <div class="team-grid" id="teamGrid">
+        <div class="team-card"><div class="avatar">NM</div><h3>Nadia Meier</h3><div class="role">Leitende Apothekerin</div></div>
+        <div class="team-card"><div class="avatar">TR</div><h3>Tobias Rüegg</h3><div class="role">Naturheilkunde</div></div>
+        <div class="team-card"><div class="avatar">SA</div><h3>Selin Aydın</h3><div class="role">Pharma-Assistentin</div></div>
+        <div class="team-card"><div class="avatar">MK</div><h3>Marco Keller</h3><div class="role">Reiseberatung</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="zeiten">
+    <div class="wrap hours-wrap">
+      <div>
+        <span class="eyebrow">Öffnungszeiten</span>
+        <h2>Diese Woche für Sie da.</h2>
+        <p style="color:var(--ink-soft); margin-top:14px;">Ausserhalb dieser Zeiten übernimmt der nationale Notfalldienst.</p>
+        <div class="emergency-box">
+          <span>⏱</span>
+          <span><b>Notfall ausserhalb der Öffnungszeiten?</b><br>0800 143 143 verweist Sie an den diensthabenden Notfalldienst in Ihrer Nähe.</span>
+        </div>
+      </div>
+      <div class="hours-card" id="dosagePlan">
+        <div class="hours-row" data-day="1"><span class="day">Montag</span><span class="time">08:00–18:30</span><span></span></div>
+        <div class="hours-row" data-day="2"><span class="day">Dienstag</span><span class="time">08:00–18:30</span><span></span></div>
+        <div class="hours-row" data-day="3"><span class="day">Mittwoch</span><span class="time">08:00–18:30</span><span></span></div>
+        <div class="hours-row" data-day="4"><span class="day">Donnerstag</span><span class="time">08:00–20:00</span><span class="tag">Lange Nacht</span></div>
+        <div class="hours-row" data-day="5"><span class="day">Freitag</span><span class="time">08:00–18:30</span><span></span></div>
+        <div class="hours-row" data-day="6"><span class="day">Samstag</span><span class="time">08:30–16:00</span><span></span></div>
+        <div class="hours-row closed" data-day="0"><span class="day">Sonntag</span><span class="time">Geschlossen</span><span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="contact-section">
+      <div class="contact-inner">
+        <div class="section-head">
+          <span class="eyebrow">Kontakt</span>
+          <h2>Fragen Sie uns — bevor Sie googeln.</h2>
+          <p>Schreiben Sie kurz, worum es geht. Wir melden uns in der Regel noch am selben Tag.</p>
+        </div>
+        <div class="contact-wrap">
+          <div class="contact-info">
+            <div class="item"><div class="k">Adresse</div><div class="v">Lindenhofstrasse 12, 8500 Frauenfeld</div></div>
+            <div class="item"><div class="k">Telefon</div><div class="v">052 720 14 14</div></div>
+            <div class="item"><div class="k">E-Mail</div><div class="v">beratung@apotheke-lindenhof.ch</div></div>
+            <div class="item"><div class="k">Notfallnummer</div><div class="v">0800 143 143</div></div>
+          </div>
+          <form onsubmit="event.preventDefault(); document.getElementById('formNote').style.opacity=1;">
+            <div class="field-group"><label for="name">Name</label><input id="name" type="text" placeholder="Ihr Name" required></div>
+            <div class="field-group"><label for="email">E-Mail</label><input id="email" type="email" placeholder="ihre@email.ch" required></div>
+            <div class="field-group"><label for="msg">Anliegen</label><textarea id="msg" placeholder="Worum geht es?" required></textarea></div>
+            <button type="submit" class="btn btn-primary">Nachricht senden</button>
+            <span id="formNote" style="opacity:0; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--mint); transition:opacity .3s ease;">Danke — wir melden uns in Kürze.</span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="fine">© 2026 Apotheke Lindenhof · Frauenfeld, Schweiz</span>
+    <span class="fine">Rezeptpflichtig? Fragen Sie Ihr Fachteam.</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    const hours = {1:[8,18.5],2:[8,18.5],3:[8,18.5],4:[8,20],5:[8,18.5],6:[8.5,16],0:null};
+    const now = new Date();
+    const day = now.getDay();
+    const t = now.getHours() + now.getMinutes()/60;
+    const range = hours[day];
+    const isOpen = range && t >= range[0] && t < range[1];
+    document.getElementById('statusText').textContent = isOpen ? 'Jetzt geöffnet' : 'Derzeit geschlossen';
+    document.getElementById('statusCard').querySelector('.dot').style.background = isOpen ? '#39D98A' : '#E36B57';
+    document.querySelectorAll('.hours-row').forEach(row=>{
+      if(parseInt(row.dataset.day) === day){ row.classList.add('today'); }
+    });
+  })();
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  document.querySelectorAll('.card, .team-card').forEach(el=> io.observe(el));
+</script>
+
+</body>
+</html>
